@@ -2,17 +2,12 @@ import { NextResponse } from 'next/server'
 import connectDB from '@/lib/mongodb'
 import Fragrance from '@/models/Fragrance'
 
-// ══════════════════════════════════════════
-// GET /api/fragrances/[id]
-// Returns ONE specific fragrance by its MongoDB _id
-// Used by: Product detail page
-// ══════════════════════════════════════════
+
 export async function GET(request, { params }) {
   try {
     await connectDB()
 
-    // params.id comes from the URL
-    // e.g. /api/fragrances/664f1a2b → params.id = "664f1a2b"
+
     const { id } = params
 
     // .findById() is Mongoose shorthand for .findOne({ _id: id })
@@ -52,18 +47,12 @@ export async function GET(request, { params }) {
 }
 
 
-// ══════════════════════════════════════════
-// DELETE /api/fragrances/[id]
-// Removes a fragrance from the database
-// Used by: Admin panel delete button
-// ══════════════════════════════════════════
 export async function DELETE(request, { params }) {
   try {
     await connectDB()
 
     const { id } = await params
 
-    // .findByIdAndDelete() finds the document AND removes it in one operation
     const fragrance = await Fragrance.findByIdAndDelete(id)
 
     // If nothing was found to delete, send 404
