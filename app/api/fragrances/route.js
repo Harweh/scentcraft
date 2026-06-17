@@ -10,7 +10,7 @@ export async function GET(request) {
 
 
     const { searchParams } = new URL(request.url)
-    const category = searchParams.get('category')
+    const category = searchParams.get('categoxry')
 
 
     const query = category ? { category } : {}
