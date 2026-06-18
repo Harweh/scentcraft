@@ -10,7 +10,8 @@
     "lint": "eslint",
     "seed": "node scripts/seed.js",
     "test-embed": "node scripts/test-embed.js",
-    "test-embed-raw": "node scripts/test-embed-raw.js"
+    "test-embed-raw": "node scripts/test-embed-raw.js",
+    "embed": "node scripts/embed-fragrances.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.104.2",

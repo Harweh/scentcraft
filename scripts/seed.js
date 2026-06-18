@@ -1,8 +1,19 @@
 // Load environment variables from .env.local manually
 // Next.js does this automatically — plain Node scripts don't
-require('dotenv').config({ path: '.env.local' })
+// require('dotenv').config({ path: '.env.local' })
+// import dotenv from 'dotenv'
+// dotenv.config({ path: '.env.local' })
+// import Fragrance from '../models/Fragrance.js'
 
-const mongoose = require('mongoose')
+
+// const mongoose = require('mongoose')
+
+import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+import Fragrance from '../models/Fragrance.js'
+
+dotenv.config({ path: '.env.local' })
+
 
 const MONGODB_URI = process.env.MONGODB_URI
 
