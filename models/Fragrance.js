@@ -48,6 +48,11 @@ const FragranceSchema = new mongoose.Schema(
       type: Boolean,
       default: true,     
     },
+    
+    embedding: {
+      type: [Number],
+      default: [],
+    }
   },
 
   {
