@@ -4,39 +4,43 @@ import mongoose from 'mongoose'
 // This defines the shape of EACH fragrance inside an order
 // It's a sub-schema meaning it lives nested inside the Order,
 // not as its own separate MongoDB collection
-const SelectedNoteSchema = new mongoose.Schema({
-  fragranceId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Fragrance',
-    required: true,
-  },
+const SelectedNoteSchema = new mongoose.Schema( 
+    {
+      fragranceId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Fragrance',
+        required: true,
+      },
 
-  name: {
-    type: String,
-    required: true,
-  },
+      name: {
+        type: String,
+        required: true,
+      },
 
-  emoji: {
-    type: String,
-    default: '🌿',
-  },
+      emoji: {
+        type: String,
+        default: '🌿',
+      },
 
-  role: {
-    type: String,
-    required: true,
-    enum: ['Base', 'Heart', 'Top'],
-  },
+      role: {
+        type: String,
+        // required: true,
+        enum: ['Base', 'Heart', 'Top'],
+        default: null,
+      },
 
-  pricePerMl: {
-    type: Number,
-    required: true,
-  },
+      pricePerMl: {
+        type: Number,
+        required: true,
+      },
 
-  mlUsed: {
-    type: Number,
-    default: 2,
-  },
-})
+      mlUsed: {
+        type: Number,
+        default: 2,
+      },
+
+  }
+)
 
 
 // ── MAIN SCHEMA: Order ────────────────────────────────
@@ -50,13 +54,44 @@ const OrderSchema = new mongoose.Schema(
       unique: true, // no two orders can share the same ID
     },
 
+    purchaseType: {
+      type: String,
+      required: true,
+      enum: ['as_is', 'manual_mix', 'ai_match'],
+      // as_is      = buying 1-2 existing fragrances directly, no mixing
+      // manual_mix = customer picked 2-3 notes themselves (Customizer page)
+      // ai_match   = customer described a mood, AI matched and blended it
+    },
+
+    deliveryZone: {
+      type: String,
+      required: true,
+      enum: ['local', 'national', 'international'],
+    },
+
+
+    // notes: {
+    //   type: [SelectedNoteSchema],
+    //   validate: {
+    //     validator: function (notes) {
+    //       return notes.length >= 1 && notes.length <= 3
+    //     },
+    //     message: 'An order must have between 1 and 3 fragrance notes',
+    //   },
+    // },
+
     notes: {
       type: [SelectedNoteSchema],
       validate: {
         validator: function (notes) {
+          if (this.purchaseType === 'as_is') {
+            return notes.length >= 1 && notes.length <= 2
+            // as-is purchases: max 2 fragrances, matches PRD scope
+          }
           return notes.length >= 1 && notes.length <= 3
+          // mix/ai_match: up to 3 notes (Base/Heart/Top)
         },
-        message: 'An order must have between 1 and 3 fragrance notes',
+      message: 'Invalid number of fragrances for this purchase type',
       },
     },
 
@@ -86,6 +121,11 @@ const OrderSchema = new mongoose.Schema(
       type: Number,
       default: 5.00,
       // The 2ml sample vial — materials and packaging
+    },
+
+    deliveryFee: {
+      type: Number,
+      required: true,
     },
 
     totalAmount: {

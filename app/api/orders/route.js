@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import connectDB from '@/lib/mongodb'
 import Order from '@/models/Order'
+import { getDeliveryFee, getMixingCosts } from '@/lib/pricing.js'
 
 
 export async function GET() {
@@ -47,6 +48,8 @@ export async function POST(request) {
       fragranceCost,   // total cost of all notes combined
       paymentMethod,   // 'cod' or 'online'
       customer,        // { name, address, phone, email }
+      purchaseType,    // ← add it here, pulled out immediately with everything else
+      deliveryZone,
     } = body
 
     if (!notes || notes.length === 0) {
@@ -79,14 +82,56 @@ export async function POST(request) {
       )
     }
 
+    if (!purchaseType || !['as_is', 'manual_mix', 'ai_match'].includes(purchaseType)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Please specify a valid purchase type',
+        },
+        { status: 400 }
+      )
+    }
+
+    if (!deliveryZone || !['local', 'national', 'international'].includes(deliveryZone)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Please specify a valid delivery zone',
+        },
+        { status: 400 }
+      )
+    }
+
     // Step 5: Calculate pricing
     // These match the PRD business model exactly:
     // Mixing fee → $15 flat
     // Vial cost  → $5 flat
     // Total      → fragranceCost + mixingFee + vialCost
-    const mixingFee = 15.00
-    const vialCost = 5.00
-    const totalAmount = Number(fragranceCost) + mixingFee + vialCost
+    // const mixingFee = 15.00
+    // const vialCost = 5.00
+    // const totalAmount = Number(fragranceCost) + mixingFee + vialCost
+
+
+    // ✅ Pricing now depends on purchaseType
+    // const { purchaseType } = body  deleted
+
+    // let mixingFee = 0
+    // let vialCost = 0
+
+    // if (purchaseType === 'manual_mix' || purchaseType === 'ai_match') {
+    //   // Only custom blends incur mixing labor and a sample vial
+    //   mixingFee = 15.00
+    //   vialCost = 5.00
+    // }
+    // as_is purchases: both stay 0 — no mixing happened, no sample vial needed
+
+    // const totalAmount = Number(fragranceCost) + mixingFee + vialCost + deliveryFee
+
+    // ✅ Replace the old manual if/else pricing logic with this
+      const { mixingFee, vialCost } = getMixingCosts(purchaseType)
+      const deliveryFee = getDeliveryFee(deliveryZone)
+      const totalAmount = Number(fragranceCost) + mixingFee + vialCost + deliveryFee
+
 
     // Step 6: Generate a unique readable Order ID
     // Date.now() gives us milliseconds since 1970 — always unique
@@ -96,11 +141,14 @@ export async function POST(request) {
     // Step 7: Create the order in MongoDB
     const order = await Order.create({
       orderId,
+      purchaseType,
+      deliveryZone,
       notes,
       scentDescription: scentDescription || '',
       fragranceCost: Number(fragranceCost),
       mixingFee,
       vialCost,
+      deliveryFee,
       totalAmount,
       customer,
       paymentMethod,
