@@ -180,10 +180,18 @@ const OrderSchema = new mongoose.Schema(
 
     // Paystack returns a reference string when payment is initiated
     // We store it so we can verify the payment in our /api/payment/verify route
-    paystackReference: {
+    // paystackReference: {
+    //   type: String,
+    //   default: '',
+    // },
+
+    // for novac
+      paymentReference: {
       type: String,
       default: '',
     },
+
+
 
     // ── ORDER STATUS ───────────────────────────────────
     status: {

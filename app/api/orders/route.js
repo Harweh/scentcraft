@@ -2,15 +2,22 @@ import { NextResponse } from 'next/server'
 import connectDB from '@/lib/mongodb'
 import Order from '@/models/Order'
 import { getDeliveryFee, getMixingCosts } from '@/lib/pricing.js'
+import { sendOrderConfirmationEmail } from '@/lib/email.js'
 
 
 export async function GET() {
   try {
-    
+
     await connectDB()
-
-
     const orders = await Order.find().sort({ createdAt: -1 })
+
+    // Fire the email — but don't let a failed email crash the whole order
+// If Gmail has a hiccup, the order should still succeed regardless
+    // try {
+    //   await sendOrderConfirmationEmail(order)
+    // } catch (emailError) {
+    //   console.error('Email sending failed (order still saved):', emailError)
+    // }
 
     return NextResponse.json(
       {
@@ -155,6 +162,12 @@ export async function POST(request) {
       // payment and order status default to 'pending'
       // as defined in our Order model
     })
+
+    try {
+      await sendOrderConfirmationEmail(order)
+    } catch (emailError) {
+      console.error('Email sending failed (order still saved):', emailError)
+    }
 
     // Step 8: Return the created order
     // status 201 = Created successfully

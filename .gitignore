@@ -39,3 +39,159 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+
+
+
+
+
+
+# //  for paystack
+# // import { NextResponse } from 'next/server'
+# // import connectDB from '@/lib/mongodb'
+# // import Order from '@/models/Order'
+# // import { initializePaystackPayment } from '@/lib/paystack'
+
+# // // ══════════════════════════════════════════
+# // // POST /api/payment/initialize
+# // // Called right after an order with paymentMethod: "online" is created
+# // // Returns a Paystack checkout link to redirect the customer to
+# // // ══════════════════════════════════════════
+# // export async function POST(request) {
+# //     try {
+# //         await connectDB()
+# //         const body = await request.json()
+# //         const { orderId, email } = body
+
+# //         if (!orderId || !email) {
+# //         return NextResponse.json(
+# //             { success: false, message: 'Order ID and email are required' },
+# //             { status: 400 }
+# //         )
+# //     }
+
+# //     // orderId here is the MongoDB _id, not the readable ORD-xxx string
+# //     const order = await Order.findById(orderId)
+# //     if (!order) {
+# //         return NextResponse.json(
+# //             { success: false, message: 'Order not found' },
+# //             { status: 404 }
+# //         )
+# //         }
+
+# //         if (order.paymentMethod !== 'online') {
+# //         return NextResponse.json(
+# //             { success: false, message: 'This order was placed as Cash on Delivery, not online payment' },
+# //             { status: 400 }
+# //         )
+# //     }
+
+# //     const paystackResponse = await initializePaystackPayment({
+# //         email,
+# //         amount: order.totalAmount,
+# //         reference: order.orderId, // reuse our readable ORD-xxx as the Paystack reference too
+# //         metadata: {
+# //             orderId: order._id.toString(),
+# //             customerName: order.customer.name,
+# //         },
+# //         })
+
+# //         if (!paystackResponse.status) {
+# //         return NextResponse.json(
+# //             { success: false, message: paystackResponse.message || 'Paystack initialization failed' },
+# //             { status: 500 }
+# //         )
+# //         }
+
+# //         // Save the reference so /api/payment/verify can find this order later
+# //         order.paystackReference = paystackResponse.data.reference
+# //         await order.save()
+
+# //         return NextResponse.json(
+# //         {
+# //             success: true,
+# //             authorizationUrl: paystackResponse.data.authorization_url,
+# //             reference: paystackResponse.data.reference,
+# //         },
+# //         { status: 200 }
+# //         )
+
+# //     } catch (error) {
+# //         console.error('POST /api/payment/initialize error:', error)
+# //         return NextResponse.json(
+# //         { success: false, message: 'Failed to initialize payment', error: error.message },
+# //         { status: 500 }
+# //         )
+# //     }
+# // }
+
+
+
+# paystack verification
+
+# // for paystack
+# // import { verifyPaystackPayment } from '@/lib/paystack'
+
+# // // ══════════════════════════════════════════
+# // // GET /api/payment/verify?reference=xxx
+# // // Called when the customer lands back on our site after paying
+# // // Re-confirms with Paystack directly — never trust the redirect alone
+# // // ══════════════════════════════════════════
+# // export async function GET(request) {
+# //     try {
+# //         await connectDB()
+# //         const { searchParams } = new URL(request.url)
+# //         const reference = searchParams.get('reference')
+
+# //         if (!reference) {
+# //         return NextResponse.json(
+# //             { success: false, message: 'Reference is required' },
+# //             { status: 400 }
+# //         )
+# //         }
+
+# //         const paystackResponse = await verifyPaystackPayment(reference)
+
+# //         if (!paystackResponse.status) {
+# //         return NextResponse.json(
+# //             { success: false, message: 'Could not verify payment with Paystack' },
+# //             { status: 500 }
+# //         )
+# //         }
+
+# //         const order = await Order.findOne({ paystackReference: reference })
+# //         if (!order) {
+# //         return NextResponse.json(
+# //             { success: false, message: 'No matching order found for this reference' },
+# //             { status: 404 }
+# //         )
+# //         }
+
+# //         // Paystack's actual transaction status — the only source of truth
+# //         if (paystackResponse.data.status === 'success') {
+# //         order.paymentStatus = 'paid'
+# //         order.status = 'confirmed'
+# //         } else {
+# //         order.paymentStatus = 'failed'
+# //         }
+
+# //         await order.save()
+
+# //         return NextResponse.json(
+# //         {
+# //             success: true,
+# //             paymentStatus: order.paymentStatus,
+# //             order,
+# //         },
+# //         { status: 200 }
+# //         )
+
+# //     } catch (error) {
+# //         console.error('GET /api/payment/verify error:', error)
+# //         return NextResponse.json(
+# //         { success: false, message: 'Failed to verify payment', error: error.message },
+# //         { status: 500 }
+# //         )
+# //     }
+# // }
