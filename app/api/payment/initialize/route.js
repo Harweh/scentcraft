@@ -3,6 +3,37 @@ import connectDB from '@/lib/mongodb'
 import Order from '@/models/Order'
 import { initializeNovacPayment } from '@/lib/novac'
 
+
+/**
+ * @swagger
+ * /api/payment/initialize:
+ *   post:
+ *     summary: Initialize a Novac payment
+ *     description: Called after an order with paymentMethod "online" is created — returns a checkout link to redirect the customer to
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [orderId, email]
+ *             properties:
+ *               orderId:
+ *                 type: string
+ *                 description: MongoDB _id of the order
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Returns authorizationUrl to redirect the customer to
+ *       400:
+ *         description: Missing fields or order is not set up for online payment
+ *       404:
+ *         description: Order not found
+ */
+
+
+
 export const runtime = 'nodejs'
 
 export async function POST(request) {

@@ -3,6 +3,50 @@ import connectDB from '@/lib/mongodb'
 import Order from '@/models/Order'
 
 
+/**
+ * @swagger
+ * /api/orders/{id}:
+ *   get:
+ *     summary: Get one order by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Order found
+ *       404:
+ *         description: Order not found
+ *   patch:
+ *     summary: Update order or payment status (Admin)
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [pending, confirmed, processing, shipped, delivered, cancelled]
+ *               paymentStatus:
+ *                 type: string
+ *                 enum: [pending, paid, failed]
+ *     responses:
+ *       200:
+ *         description: Order updated successfully
+ *       404:
+ *         description: Order not found
+ */
+
+
 export async function GET(request, { params }) {
   try {
     await connectDB()

@@ -3,6 +3,30 @@ import connectDB from '@/lib/mongodb'
 import Order from '@/models/Order'
 import { verifyNovacPayment } from '@/lib/novac'
 
+
+/**
+ * @swagger
+ * /api/payment/verify:
+ *   get:
+ *     summary: Verify a Novac payment
+ *     description: Re-confirms transaction status directly with Novac and updates the order's paymentStatus
+ *     parameters:
+ *       - in: query
+ *         name: reference
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Returns the updated payment status and order
+ *       400:
+ *         description: Reference missing
+ *       404:
+ *         description: No matching order found for this reference
+ */
+
+
+
 export async function GET(request) {
     try {
         await connectDB()

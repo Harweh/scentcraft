@@ -4,9 +4,42 @@ import { MongoClient } from 'mongodb'
 import embeddings from '@/lib/embeddings.js'
 import OpenAI from 'openai'
 
+
 // This tells Next.js to run this route in Node.js runtime
 // Required because @langchain/mongodb only works in Node — not the Edge runtime
 export const runtime = 'nodejs'
+
+
+/**
+ * @swagger
+ * /api/ai/describe-match:
+ *   post:
+ *     summary: AI-matched perfume from a mood description
+ *     description: Embeds the customer's description, searches the vector index for the closest real fragrances, and generates a name + description using only matched results (RAG)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [description]
+ *             properties:
+ *               description:
+ *                 type: string
+ *                 example: I want to feel warm, confident and mysterious
+ *               gender:
+ *                 type: string
+ *                 enum: [male, female, unisex]
+ *     responses:
+ *       200:
+ *         description: Matched fragrances with AI-generated name and description
+ *       400:
+ *         description: Description missing or too short
+ *       404:
+ *         description: No matching fragrances found
+ */
+
+
 
 // ══════════════════════════════════════════════════════
 // POST /api/ai/describe-match

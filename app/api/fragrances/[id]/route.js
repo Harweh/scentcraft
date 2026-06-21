@@ -3,6 +3,42 @@ import connectDB from '@/lib/mongodb'
 import Fragrance from '@/models/Fragrance'
 
 
+/**
+ * @swagger
+ * /api/fragrances/{id}:
+ *   get:
+ *     summary: Get one fragrance by ID
+ *     description: Returns a single fragrance document by its MongoDB _id
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: MongoDB _id of the fragrance
+ *     responses:
+ *       200:
+ *         description: Fragrance found
+ *       404:
+ *         description: Fragrance not found
+ *   delete:
+ *     summary: Delete a fragrance (Admin)
+ *     description: Permanently removes a fragrance from the catalog
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: MongoDB _id of the fragrance
+ *     responses:
+ *       200:
+ *         description: Fragrance deleted successfully
+ *       404:
+ *         description: Fragrance not found
+ */
+
+
 export async function GET(request, { params }) {
   try {
     await connectDB()

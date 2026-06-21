@@ -5,6 +5,76 @@ import { getDeliveryFee, getMixingCosts } from '@/lib/pricing.js'
 import { sendOrderConfirmationEmail } from '@/lib/email.js'
 
 
+/**
+ * @swagger
+ * /api/orders:
+ *   get:
+ *     summary: Get all orders
+ *     description: Returns all orders, newest first
+ *     responses:
+ *       200:
+ *         description: List of orders
+ *   post:
+ *     summary: Place a new order
+ *     description: Creates a new order — supports as_is, manual_mix, and ai_match purchase types
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [purchaseType, deliveryZone, notes, paymentMethod, customer]
+ *             properties:
+ *               purchaseType:
+ *                 type: string
+ *                 enum: [as_is, manual_mix, ai_match]
+ *               deliveryZone:
+ *                 type: string
+ *                 enum: [local, national, international]
+ *               notes:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     fragranceId:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     emoji:
+ *                       type: string
+ *                     role:
+ *                       type: string
+ *                       enum: [Base, Heart, Top]
+ *                     pricePerMl:
+ *                       type: number
+ *                     mlUsed:
+ *                       type: number
+ *               fragranceCost:
+ *                 type: number
+ *               scentDescription:
+ *                 type: string
+ *               paymentMethod:
+ *                 type: string
+ *                 enum: [cod, online]
+ *               customer:
+ *                 type: object
+ *                 required: [name, address, phone]
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                   address:
+ *                     type: string
+ *                   phone:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *     responses:
+ *       201:
+ *         description: Order placed successfully
+ *       400:
+ *         description: Missing or invalid fields
+ */
+
 export async function GET() {
   try {
 

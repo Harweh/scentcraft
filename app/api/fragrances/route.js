@@ -3,6 +3,57 @@ import connectDB from '@/lib/mongodb'
 import Fragrance from '@/models/Fragrance'
 
 
+/**
+ * @swagger
+ * /api/fragrances:
+ *   get:
+ *     summary: Get all in-stock fragrances
+ *     description: Returns all fragrances, optionally filtered by category
+ *     parameters:
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *           enum: [Floral, Woody, Fresh, Oriental, Citrus]
+ *         description: Filter fragrances by category
+ *     responses:
+ *       200:
+ *         description: List of fragrances
+ *   post:
+ *     summary: Add a new fragrance (Admin)
+ *     description: Creates a new fragrance in the catalog
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name, category, description, duration, pricePerMl]
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: White Musk
+ *               category:
+ *                 type: string
+ *                 enum: [Floral, Woody, Fresh, Oriental, Citrus]
+ *               description:
+ *                 type: string
+ *               duration:
+ *                 type: string
+ *                 enum: [Short, Medium, Long]
+ *               pricePerMl:
+ *                 type: number
+ *                 example: 2.90
+ *     responses:
+ *       201:
+ *         description: Fragrance created successfully
+ *       400:
+ *         description: Missing required fields
+ *       409:
+ *         description: Fragrance with this name already exists
+ */
+
+
 export async function GET(request) {
   try {
     // Step 1: Connect to MongoDB using our cached connection from lib/mongodb.js
