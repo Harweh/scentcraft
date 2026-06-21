@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import connectDB from '@/lib/mongodb'
 import Order from '@/models/Order'
 import { initializeNovacPayment } from '@/lib/novac'
+import Transaction from '@/models/Transaction'
 
 
 /**
@@ -68,6 +69,8 @@ export async function POST(request) {
         const firstName = nameParts[0]
         const lastName = nameParts.slice(1).join(' ') || nameParts[0]
 
+        console.log('Sending to Novac:', { firstName, lastName, email })
+
         const novacResponse = await initializeNovacPayment({
         email,
         firstName,
@@ -88,6 +91,19 @@ export async function POST(request) {
 
         order.paymentReference = novacResponse.data.transactionReference
         await order.save()
+
+        // Log the attempt the moment it starts — even if the customer
+        // never comes back to trigger /verify, this proof still exists
+        await Transaction.create({
+        order: order._id,
+        orderId: order.orderId,
+        reference: novacResponse.data.transactionReference,
+        amount: order.totalAmount,
+        currency: 'NGN',
+        status: 'pending',
+        source: 'initialize',
+        gatewayResponse: novacResponse.data,
+        })
 
         return NextResponse.json(
         {

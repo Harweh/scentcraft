@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server'
 import connectDB from '@/lib/mongodb'
 import Order from '@/models/Order'
+import Transaction from '@/models/Transaction'
 import { verifyNovacPayment } from '@/lib/novac'
+import { sendPaymentConfirmedEmail } from '@/lib/email.js'
 
 
 /**
@@ -24,6 +26,7 @@ import { verifyNovacPayment } from '@/lib/novac'
  *       404:
  *         description: No matching order found for this reference
  */
+
 
 
 
@@ -57,22 +60,41 @@ export async function GET(request) {
         )
         }
 
+        let finalStatus = 'pending'
         if (novacResponse.data.status === 'successful') {
         order.paymentStatus = 'paid'
         order.status = 'confirmed'
+        finalStatus = 'successful'
         } else if (novacResponse.data.status === 'failed') {
         order.paymentStatus = 'failed'
+        finalStatus = 'failed'
         }
-        // if "pending" — leave as-is, don't change anything yet
 
         await order.save()
 
+        // Log this verification event permanently — separate from the order itself
+        await Transaction.create({
+        order: order._id,
+        orderId: order.orderId,
+        reference,
+        amount: order.totalAmount,
+        currency: 'NGN',
+        status: finalStatus,
+        source: 'verify',
+        gatewayResponse: novacResponse.data,
+        })
+
+        // Fire the payment-confirmed email — separate from the order-placed email
+        if (order.paymentStatus === 'paid') {
+        try {
+            await sendPaymentConfirmedEmail(order)
+        } catch (emailError) {
+            console.error('Payment confirmation email failed:', emailError)
+        }
+        }
+
         return NextResponse.json(
-        {
-            success: true,
-            paymentStatus: order.paymentStatus,
-            order,
-        },
+        { success: true, paymentStatus: order.paymentStatus, order },
         { status: 200 }
         )
 
