@@ -195,3 +195,109 @@ next-env.d.ts
 # //         )
 # //     }
 # // }
+
+
+
+
+
+
+
+# // import nodemailer from 'nodemailer'
+
+# // // This creates ONE reusable email "transporter" — the object
+# // // that actually knows how to log into Gmail and send mail
+# // const transporter = nodemailer.createTransport({
+# //   service: 'gmail',
+# //   auth: {
+# //     user: process.env.EMAIL_USER,
+# //     pass: process.env.EMAIL_PASS,
+# //   },
+# // })
+
+# // // Builds and sends the order confirmation email
+# // // Called right after an order is successfully saved to MongoDB
+# // export async function sendOrderConfirmationEmail(order) {
+# //   // If the customer didn't provide an email, just skip silently —
+# //   // email is optional in our Order model, COD customers may not give one
+# //     if (!order.customer.email) {
+# //         console.log('No customer email provided — skipping confirmation email')
+# //         return
+# //     }
+
+# //     // Build a simple, readable list of fragrances for the email body
+# //     const fragranceList = order.notes
+# //         .map(note => `${note.emoji} ${note.name}${note.role ? ` (${note.role})` : ''}`)
+# //         .join(', ')
+
+# //     const html = `
+# //         <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 24px; background: #1a1714; color: #f5efe6; border-radius: 12px;">
+# //         <h2 style="color: #c9a84c; font-weight: 300;">✦ ScentCraft</h2>
+# //         <p>Hi ${order.customer.name},</p>
+# //         <p>Your order has been placed successfully! 🎉</p>
+
+# //         <div style="background: #2a2520; padding: 16px; border-radius: 8px; margin: 16px 0;">
+# //             <p style="margin: 4px 0;"><strong>Order ID:</strong> ${order.orderId}</p>
+# //             <p style="margin: 4px 0;"><strong>Fragrances:</strong> ${fragranceList}</p>
+# //             <p style="margin: 4px 0;"><strong>Total:</strong> $${order.totalAmount.toFixed(2)}</p>
+# //             <p style="margin: 4px 0;"><strong>Payment:</strong> ${order.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Paid Online'}</p>
+# //         </div>
+
+# //         <p>We'll notify you as your order progresses. Thank you for choosing ScentCraft!</p>
+# //         </div>
+# //     `
+
+# //     // sendMail() actually dispatches the email through Gmail's servers
+# //     await transporter.sendMail({
+# //         from: `"ScentCraft" <${process.env.EMAIL_USER}>`,
+# //         to: order.customer.email,
+# //         subject: `Order Confirmed — ${order.orderId}`,
+# //         html,
+# //     })
+
+# //     console.log(`✅ Confirmation email sent to ${order.customer.email}`)
+# // }
+
+
+
+# to migrate mongodb
+
+# import { MongoClient } from 'mongodb'
+# import dotenv from 'dotenv'
+# dotenv.config({ path: '.env.local' })
+
+# const OLD_URI = process.env.MONGODB_URI
+# const NEW_URI = process.env.MONGODB_URI_NEW
+
+# // Every collection that currently has real data in it
+# const COLLECTIONS = ['fragrances', 'orders']
+
+# async function migrate() {
+#     const oldClient = new MongoClient(OLD_URI)
+#     const newClient = new MongoClient(NEW_URI)
+
+#     await oldClient.connect()
+#     await newClient.connect()
+#     console.log('✅ Connected to both old and new clusters')
+
+#     const oldDb = oldClient.db('scentcraft')
+#     const newDb = newClient.db('scentcraft')
+
+#     for (const collectionName of COLLECTIONS) {
+#         const documents = await oldDb.collection(collectionName).find({}).toArray()
+
+#         if (documents.length === 0) {
+#         console.log(`⚠️  ${collectionName}: nothing to migrate`)
+#         continue
+#         }
+
+#         await newDb.collection(collectionName).insertMany(documents)
+#         console.log(`✅ Migrated ${documents.length} documents from "${collectionName}"`)
+#     }
+
+#     await oldClient.close()
+#     await newClient.close()
+#     console.log('🎉 Migration complete')
+#     process.exit(0)
+# }
+
+# migrate()
