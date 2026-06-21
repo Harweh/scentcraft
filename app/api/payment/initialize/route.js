@@ -69,7 +69,7 @@ export async function POST(request) {
         const firstName = nameParts[0]
         const lastName = nameParts.slice(1).join(' ') || nameParts[0]
 
-        console.log('Sending to Novac:', { firstName, lastName, email })
+        // console.log('Sending to Novac:', { firstName, lastName, email })
 
         const novacResponse = await initializeNovacPayment({
         email,
