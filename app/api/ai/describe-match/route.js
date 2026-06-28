@@ -3,6 +3,7 @@ import { MongoDBAtlasVectorSearch } from '@langchain/mongodb'
 import { MongoClient } from 'mongodb'
 import embeddings from '@/lib/embeddings.js'
 import OpenAI from 'openai'
+import { MIXING_FEE, VIAL_COST } from '@/lib/pricing.js'
 
 
 // This tells Next.js to run this route in Node.js runtime
@@ -146,8 +147,8 @@ export async function POST(request) {
         const fragranceCost = matchedFragrances.reduce(
         (sum, f) => sum + f.pricePerMl * f.mlUsed, 0
         )
-        const mixingFee = 15.00
-        const vialCost  = 5.00
+        const mixingFee = MIXING_FEE
+        const vialCost  = VIAL_COST
         const totalAmount = fragranceCost + mixingFee + vialCost
 
         // ── STEP 7: Build the Puter prompt ─────────────────────

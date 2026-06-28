@@ -301,3 +301,124 @@ next-env.d.ts
 # }
 
 # migrate()
+
+
+
+
+
+
+
+
+
+
+
+
+# 'use client'
+
+# import { useState, useEffect } from 'react'
+# import { BRAND_NAME } from '@/lib/brand'
+
+# // const CATEGORIES = ['Floral', 'Woody', 'Fresh', 'Oriental', 'Citrus']
+
+
+# export default function Navbar() {
+#     const [menuOpen, setMenuOpen] = useState(false)
+#         // const [fragrances, setFragrances] = useState([])
+#         // const [filtered, setFiltered] = useState([])
+#         // const [activeCategory, setActiveCategory] = useState(null)
+#         // const [search, setSearch] = useState('')
+#         // const [loading, setLoading] = useState(true)
+    
+#         // useEffect(() => {
+#         //     fetch('/api/fragrances')
+#         //     .then(res => res.json())
+#         //     .then(data => {
+#         //         if (data.success) {
+#         //         setFragrances(data.data)
+#         //         setFiltered(data.data)
+#         //         }
+#         //     })
+#         //     .finally(() => setLoading(false))
+#         // }, [])
+    
+#         // useEffect(() => {
+#         //     let result = fragrances
+#         //     if (activeCategory) result = result.filter(f => f.category === activeCategory)
+#         //     if (search.trim()) {
+#         //     result = result.filter(f => f.name.toLowerCase().includes(search.toLowerCase()))
+#         //     }
+#         //     setFiltered(result)
+#         // }, [activeCategory, search, fragrances])
+
+#     return (
+#         <header className="bg-[#1A1714] text-white sticky top-0 z-50">
+#         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+#             <a href="/catalog" className="font-[family-name:var(--font-display)] text-lg sm:text-xl italic shrink-0">
+#             {BRAND_NAME}
+#             </a>
+
+#             {/* Full nav links — hidden below tablet width */}
+#             <nav className="hidden md:flex gap-8 text-sm">
+#             <a href="/catalog" className="hover:text-[#B8924A] transition">Collections</a>
+#             <a href="/customizer" className="hover:text-[#B8924A] transition">Bespoke Lab</a>
+#             <a href="/orders" className="hover:text-[#B8924A] transition">Orders</a>
+#             </nav>
+
+#             <section className="mb-8 sm:mb-10 border-t border-[#E5E0D8] pt-6 sm:pt-8">
+#                 <input
+#                 type="text"
+#                 placeholder="Search fragrances…"
+#                 value={search}
+#                 onChange={e => setSearch(e.target.value)}
+#                 className="w-full border border-[#E5E0D8] px-4 py-2.5 mt-2.5 text-sm mb-3 focus:outline-none focus:border-[#B8924A]"
+#                 />
+#                 {/* <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible scrollbar-hide">
+#                 <button
+#                     onClick={() => setActiveCategory(null)}
+#                     className={`shrink-0 px-4 py-2 text-xs uppercase tracking-wide border whitespace-nowrap ${!activeCategory ? 'bg-[#1A1714] text-white' : 'border-[#E5E0D8] text-[#6B6459]'}`}
+#                 >
+#                     All
+#                 </button>
+#                 {CATEGORIES.map(cat => (
+#                     <button
+#                     key={cat}
+#                     onClick={() => setActiveCategory(cat)}
+#                     className={`shrink-0 px-4 py-2 text-xs uppercase tracking-wide border whitespace-nowrap ${activeCategory === cat ? 'bg-[#1A1714] text-white' : 'border-[#E5E0D8] text-[#6B6459]'}`}
+#                     >
+#                     {cat}
+#                     </button>
+#                 ))}
+#                 </div> */}
+#             </section>
+
+#             <div className="flex items-center gap-4">
+#             <button aria-label="Search" className="text-lg">🔍</button>
+#             <button aria-label="Cart" className="text-lg">🛍️</button>
+
+
+          
+
+#             {/* Hamburger — only shows below tablet width */}
+#             <button
+#                 aria-label="Menu"
+#                 className="md:hidden flex flex-col gap-1.5 ml-2"
+#                 onClick={() => setMenuOpen(!menuOpen)}
+#             >
+#                 <span className={`block w-6 h-px bg-white transition ${menuOpen ? 'rotate-45 translate-y-1.5' : ''}`} />
+#                 <span className={`block w-6 h-px bg-white transition ${menuOpen ? 'opacity-0' : ''}`} />
+#                 <span className={`block w-6 h-px bg-white transition ${menuOpen ? '-rotate-45 -translate-y-1.5' : ''}`} />
+#             </button>
+#             </div>
+#         </div>
+
+#         {/* Mobile menu — only rendered when hamburger is tapped open */}
+#         {menuOpen && (
+#             <nav className="md:hidden flex flex-col px-4 pb-4 gap-1 text-sm border-t border-white/10">
+#             <a href="/catalog" className="py-3" onClick={() => setMenuOpen(false)}>Collections</a>
+#             <a href="/customizer" className="py-3" onClick={() => setMenuOpen(false)}>Bespoke Lab</a>
+#             <a href="/orders" className="py-3" onClick={() => setMenuOpen(false)}>Orders</a>
+#             </nav>
+#         )}
+#         </header>
+#     )
+# }

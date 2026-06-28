@@ -113,13 +113,13 @@ const OrderSchema = new mongoose.Schema(
 
     mixingFee: {
       type: Number,
-      default: 15.00,
+      default: 2500,
       // Flat fee — covers labor and equipment as per PRD business model
     },
 
     vialCost: {
       type: Number,
-      default: 5.00,
+      default: 800,
       // The 2ml sample vial — materials and packaging
     },
 

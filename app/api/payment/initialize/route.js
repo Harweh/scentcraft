@@ -79,7 +79,7 @@ export async function POST(request) {
         amount: order.totalAmount,
         reference: order.orderId,
         redirectUrl: `${process.env.NEXT_PUBLIC_APP_URL}/orders`,
-        description: `ScentCraft order ${order.orderId}`,
+        description: `Aura Luxe order ${order.orderId}`,
         })
 
         if (!novacResponse.status) {

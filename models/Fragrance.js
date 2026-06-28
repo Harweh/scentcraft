@@ -33,6 +33,14 @@ const FragranceSchema = new mongoose.Schema(
       min: 0,           
     },
 
+        // NEW — path to a real product photo, e.g. '/images/sandalwood-noir.png'
+    // Empty string means "no real photo yet" — every page already checks
+    // for this and falls back to the emoji/color block automatically
+    imageUrl: { 
+      type: 
+      String, 
+      default: '' },
+
     color: {
       type: String,
       required: true,
