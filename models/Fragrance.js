@@ -32,7 +32,12 @@ const FragranceSchema = new mongoose.Schema(
       required: true,
       min: 0,           
     },
-
+    
+    productType: {
+      type: String,
+      enum: ['essence', 'finished'],
+      default: 'essence',
+    },
         // NEW — path to a real product photo, e.g. '/images/sandalwood-noir.png'
     // Empty string means "no real photo yet" — every page already checks
     // for this and falls back to the emoji/color block automatically

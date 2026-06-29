@@ -171,7 +171,6 @@ const MONGODB_URI = process.env.MONGODB_URI
 
 // ── THE SEED FUNCTION ───────────────────────────────────
 
-
 const fragrances = [
   {
     name: 'Imperial Rose',
@@ -179,6 +178,7 @@ const fragrances = [
     description: 'A pure, focused floral heart with rich, romantic depth. Velvety rose petals with a whisper of honeyed sweetness.',
     duration: 'Long',
     pricePerMl: 3500,
+    productType: 'essence',
     imageUrl: '/images/Imperial Rose.png',
     color: '#e8a0b0',
     emoji: '🌹',
@@ -190,6 +190,7 @@ const fragrances = [
     description: 'Warm, creamy, and grounding. A timeless woody base that lingers like sun-warmed timber.',
     duration: 'Long',
     pricePerMl: 2800,
+    productType: 'essence',
     imageUrl: '/images/Sandalwood Noir Perfume.png',
     color: '#a67c52',
     emoji: '🪵',
@@ -201,6 +202,7 @@ const fragrances = [
     description: 'Bright and zesty with a sparkling citrus snap. Energizing and fresh, like sunlight through orchard leaves.',
     duration: 'Short',
     pricePerMl: 2200,
+    productType: 'essence',
     imageUrl: '/images/Lagos Morning Perfume.png',
     color: '#f4d35e',
     emoji: '🍋',
@@ -212,6 +214,7 @@ const fragrances = [
     description: 'Rich, creamy sweetness with a soft powdery finish. Comforting and addictive, like warm dessert on a cold evening.',
     duration: 'Long',
     pricePerMl: 2500,
+    productType: 'essence',
     imageUrl: '/images/scent perfume.png',
     color: '#f3e5d8',
     emoji: '🍦',
@@ -223,6 +226,7 @@ const fragrances = [
     description: 'Crisp and airy, evoking salt-kissed wind and open water. Clean and invigorating.',
     duration: 'Medium',
     pricePerMl: 2000,
+    productType: 'essence',
     imageUrl: '/images/Luxe Perfume Bottle.png',
     color: '#8ecae6',
     emoji: '🌊',
@@ -234,6 +238,7 @@ const fragrances = [
     description: 'Deep, golden, and resinous with a warm glow. Sensual and enveloping, like firelight at dusk.',
     duration: 'Long',
     pricePerMl: 3000,
+    productType: 'essence',
     imageUrl: '/images/Bestseller perfume bottle.png',
     color: '#d98324',
     emoji: '🧡',
@@ -245,6 +250,7 @@ const fragrances = [
     description: 'Intoxicating white floral with a heady, narcotic sweetness. Lush and feminine, blooming under a night sky.',
     duration: 'Medium',
     pricePerMl: 3200,
+    productType: 'essence',
     imageUrl: '/images/Desert Jasmine Perfume.png',
     color: '#f7cad0',
     emoji: '🌼',
@@ -256,6 +262,7 @@ const fragrances = [
     description: 'Earthy and dark with a hint of camphor. Mysterious and grounding, like damp forest soil after rain.',
     duration: 'Long',
     pricePerMl: 2600,
+    productType: 'essence',
     imageUrl: '/images/Desert Smoke.png',
     color: '#6b4423',
     emoji: '🍂',
@@ -267,6 +274,7 @@ const fragrances = [
     description: 'Soft herbal florals with a calming, soapy clean edge. Soothing and gentle, like a summer field at golden hour.',
     duration: 'Medium',
     pricePerMl: 2100,
+    productType: 'essence',
     imageUrl: '/images/Santal Noir.png',
     color: '#b39ddb',
     emoji: '💜',
@@ -278,6 +286,7 @@ const fragrances = [
     description: 'Tart and juicy with a sparkling pink fizz. Playful and refreshing, like biting into ripe fruit.',
     duration: 'Short',
     pricePerMl: 2300,
+    productType: 'essence',
     imageUrl: '/images/Bestseller perfume bottle2.png',
     color: '#ff9a76',
     emoji: '🍊',
@@ -289,6 +298,7 @@ const fragrances = [
     description: 'Dry, pencil-shaving woodiness with a smooth, comforting finish. Sturdy and quietly confident.',
     duration: 'Long',
     pricePerMl: 2400,
+    productType: 'essence',
     imageUrl: '/images/Image 2.png',
     color: '#4a5a3a',
     emoji: '🌲',
@@ -300,13 +310,13 @@ const fragrances = [
     description: 'Spicy and effervescent with a rosy pink sparkle. Lively and unexpected, adding a tingling kick.',
     duration: 'Short',
     pricePerMl: 2700,
+    productType: 'essence',
     imageUrl: '/images/Luxurious perfume bottle close-up.png',
     color: '#c1666b',
     emoji: '🌶️',
     inStock: true,
   },
 ]
-
 
 async function seed() {
   try {

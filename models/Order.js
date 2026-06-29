@@ -85,7 +85,7 @@ const OrderSchema = new mongoose.Schema(
       validate: {
         validator: function (notes) {
           if (this.purchaseType === 'as_is') {
-            return notes.length >= 1 && notes.length <= 2
+            return notes.length >= 1 && notes.length <= 10
             // as-is purchases: max 2 fragrances, matches PRD scope
           }
           return notes.length >= 1 && notes.length <= 3
