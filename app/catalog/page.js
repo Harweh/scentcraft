@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import FragranceCard from '@/components/FragranceCard'
 
 const CATEGORIES = ['Floral', 'Woody', 'Fresh', 'Oriental', 'Citrus']
 
