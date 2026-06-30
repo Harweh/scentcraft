@@ -40,7 +40,7 @@ const COLLECTION_PREVIEWS = [
 
 export default function HomePage() {
   return (
-    <main className="bg-[#100E0B] text-[#F5EFE6] min-h-screen">
+    <main className="bg-[#ad9772] text-[#F5EFE6] min-h-screen">
 
       {/* ── HERO ───────────────────────────────────────────── */}
       <section className="relative min-h-[90vh] flex items-end overflow-hidden">
